@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{05cb0453-245d-4baa-aadc-e0edc4e3ff30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{93067f6a-f304-4bf8-b3f8-abedfccd6306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Base">
+      <UniqueIdentifier>{4892e41f-116c-49d8-b5aa-f643390c9f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\UI">
+      <UniqueIdentifier>{b598d958-c1de-4e7e-8a89-81ce374da30d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Scripting">
+      <UniqueIdentifier>{16b0b9b8-fc06-4c00-8dc4-3021181f3f97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Module">
+      <UniqueIdentifier>{79f5f47c-f992-416d-9e1b-a7f0b2d795ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Base\Utilities.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Module\OcrSystem.h">
+      <Filter>Source\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Module\WindowsCapture.h">
+      <Filter>Source\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Module\USmartTradeSystem.h">
+      <Filter>Source\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Base\Singleton.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scripting\MonoScriptingSystem.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Base\Utilities.cpp">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Module\OcrSystem.cpp">
+      <Filter>Source\Module</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Module\WindowsCapture.cpp">
+      <Filter>Source\Module</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\TradeOperationPanel.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Module\USmartTradeSystem.cpp">
+      <Filter>Source\Module</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scripting\MonoScriptingSystem.cpp">
+      <Filter>Source\Scripting</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="Resource\TradeOperationPanel.ui">
+      <Filter>Resource</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="UI\TradeOperationPanel.h">
+      <Filter>Source\UI</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>
