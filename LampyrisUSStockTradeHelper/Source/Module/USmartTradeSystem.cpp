@@ -10,7 +10,7 @@
 #include "USmartTradeSystem.h"
 
 USmartTradeSystem::USmartTradeSystem() {
-
+	m_httpRequestClass = MonoScriptingSystem::GetInstance()->GetType("LampyrisUIStockTradeHelper.Managed", "HttpRequest");
 }
 
 USmartTradeSystem::~USmartTradeSystem() {
@@ -18,6 +18,7 @@ USmartTradeSystem::~USmartTradeSystem() {
 }
 
 void USmartTradeSystem::ExecuteBuyByRatio(const std::string& code, int ratio) {
+	m_httpRequestClass->Invoke(nullptr, "PostAsync", "/asset-center-sg/api/app-stockHoldAsset/v5");
 }
 
 void USmartTradeSystem::ExecuteSellByRatio(const std::string& code, int ratio) {

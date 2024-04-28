@@ -11,17 +11,27 @@
 #include <iostream>
 #include <windows.h>
 #include <QtWidgets/QApplication>
+#include <QFileInfo>
+#include <QDir>
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
+    QString appPath = argv[0];
+    QString appDirPath = QFileInfo(appPath).dir().path();
+    std::string asmPath = appDirPath.toStdString() + "\\LampyrisUSStockTradeHelper.Managed.dll";
+
     QApplication a(argc, argv);
     int returnCode;
 
     try {
         MonoScriptingSystem::GetInstance()->Initialize();
-        MonoScriptingSystem::GetInstance()->LoadAssembly("LampyrisUSStockTradeHelper.Managed.dll");
+        MonoScriptingSystem::GetInstance()->LoadAssembly("C:\\Users\\Administrator\\source\\repos\\LampyrisUSStockTradeHelper\\x64\\Debug\\EntryPoint.dll");
         {
+            // ³õÊ¼»¯C# 
+            auto type = MonoScriptingSystem::GetInstance()->GetType("LampyrisUIStockTradeHelper.Managed","EntryPoint");
+            MonoObject* o = type->Invoke(nullptr, "Main(int)", 3);
+            int val = mono_to_native<int>(o);
             returnCode = a.exec();
         }
         MonoScriptingSystem::GetInstance()->Finalize();

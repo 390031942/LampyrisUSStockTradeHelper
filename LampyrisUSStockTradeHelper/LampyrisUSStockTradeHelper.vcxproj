@@ -32,6 +32,7 @@
     <ClInclude Include="Source\Module\WindowsCapture.h" />
     <ClInclude Include="Source\Module\USmartTradeSystem.h" />
     <ClInclude Include="Source\Scripting\MonoScriptingSystem.h" />
+    <ClInclude Include="Source\Scripting\SignatureMaker.h" />
     <QtMoc Include="UI\TradeOperationPanel.h" />
   </ItemGroup>
   <ItemGroup>
@@ -59,7 +60,7 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>5.14.0</QtInstall>
+    <QtInstall>_Qt-static</QtInstall>
     <QtModules>core;gui;widgets;winextras</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
@@ -93,6 +94,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
       <AdditionalDependencies>mono-2.0-sgen.lib;RapidOcrOnnx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>

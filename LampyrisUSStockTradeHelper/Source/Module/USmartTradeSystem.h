@@ -10,8 +10,23 @@
 
 #include <string>
 #include <Base/Singleton.h>
+#include <Scripting/MonoScriptingSystem.h>
+
+class ScriptingStringContent :public IMonoObjectWrapper {
+public:
+	ScriptingStringContent(const std::string& content, const std::string& mediaType) {
+
+	}
+
+	virtual MonoObject* ToMonoObject() {
+		auto type = MonoScriptingSystem::GetInstance()->GetType("System.Net.Http", "StringContent");
+		type->New();
+	}
+};
 
 class USmartTradeSystem:public Singleton<USmartTradeSystem> {
+private:
+	MonoScriptingClassPtr m_httpRequestClass;
 public:
 	         USmartTradeSystem();
 
