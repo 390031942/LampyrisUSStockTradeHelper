@@ -7,7 +7,6 @@
 ** Desc: 实现了基于Mono框架的C#脚本子系统，支持加载C#程序集，
          调用程序集里定义的函数并获取返回值等功能 
 ****************************************************************************/
-
 #pragma once
 
 #include <format>
@@ -19,13 +18,18 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 
+class IMonoObjectWrapper {
+    virtual MonoObject* ToMonoObject() = 0;
+};
+
 template<typename T>
-T mono_extract_value(MonoObject* obj) {
-    throw std::runtime_error("Unsupported type");
+static T mono_extract_value(MonoObject* monoObject) {
+    if (!monoObject) throw std::runtime_error("Null MonoObject* provided");
+    return *(T*)mono_object_unbox(monoObject);
 }
 
 template<>
-std::string mono_extract_value(MonoObject* monoObject) {
+static std::string mono_extract_value(MonoObject* monoObject) {
     if (!monoObject) {
         throw std::runtime_error("Null MonoObject* provided");
     }
@@ -39,7 +43,7 @@ std::string mono_extract_value(MonoObject* monoObject) {
 }
 
 template<typename T>
-T mono_to_native(MonoObject* monoObject) {
+static T mono_to_native(MonoObject* monoObject) {
     if (!monoObject) {
         throw std::runtime_error("Null MonoObject* provided");
     }
@@ -47,7 +51,7 @@ T mono_to_native(MonoObject* monoObject) {
     // 获取MonoObject的类型
     MonoClass* monoClass = mono_object_get_class(monoObject);
     MonoType* monoType = mono_class_get_type(monoClass);
-    MonoTypeEnum monoTypeCode = mono_type_get_type(monoType);
+    MonoTypeEnum monoTypeCode = (MonoTypeEnum)mono_type_get_type(monoType);
 
     // 根据T的类型，确定MonoTypeEnum值
     MonoTypeEnum expectedTypeCode;
@@ -85,6 +89,7 @@ T mono_to_native(MonoObject* monoObject) {
 class MonoScriptingClass {
     typedef std::unordered_map<std::string, MonoMethod*> MethodHandleMap;
 private:
+    MonoDomain*     m_pMonoDomain;
     MonoClass*      m_hClassHandle;
     std::string     m_className;
     MethodHandleMap m_methodHandleMap;
@@ -115,12 +120,21 @@ public:
             const char* exCStr = mono_string_to_utf8(exStr);
             std::string errorMsg = "Exception thrown: ";
             errorMsg += exCStr;
-            mono_free(exCStr);
+            mono_free(exception);
             throw std::runtime_error(errorMsg);
         }
         return result;
     }
     
+    MonoObject* New() {
+        MonoObject * obj = mono_object_new(this->m_pMonoDomain, this->m_hClassHandle);
+        return obj;
+    }
+
+    template<typename ...Args>
+    MonoObject* New(Args... args) {
+        return this->Invoke
+    }
     friend class MonoScriptingSystem;
 };
 
@@ -140,5 +154,7 @@ public:
                           
     bool                  LoadAssembly(const std::string& assemblyName);
 
-    MonoScriptingClassPtr GetType(const std::string& typeName);
+    MonoScriptingClassPtr GetType(const std::string& namespaceName,const std::string& typeName);
+
+    MonoString*           GetString(const char* string);
 };

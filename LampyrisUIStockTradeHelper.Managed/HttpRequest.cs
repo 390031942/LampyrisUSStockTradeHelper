@@ -3,9 +3,8 @@
 ** Copyright (C) 2024 HongJin Investment Cooperation
 ** Contact: gameta@qq.com
 **
-** File: MonoScriptingSystem.h
-** Desc: 实现了基于Mono框架的C#脚本子系统，支持加载C#程序集，
-         调用程序集里定义的函数并获取返回值等功能 
+** File: HttpRequest.cs
+** Desc: 实现了异步网络请求的功能，方便C++调用并获取响应的结果
 ****************************************************************************/
 
 using System;
@@ -14,6 +13,7 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text;
 
 namespace LampyrisUIStockTradeHelper.Managed    
 {
@@ -99,7 +99,18 @@ namespace LampyrisUIStockTradeHelper.Managed
 
         public static int PostAsync(string url,HttpContent httpContent)
         {
+            httpContent = new StringContent("");
             return ms_taskContainer.Add(ms_client.PostAsync(url, httpContent));
+        }
+
+        public static HttpResponseMessage GetSync(string url)
+        {
+            return ms_client.GetAsync(url).Result;
+        }
+
+        public static HttpResponseMessage PostSync(string url, HttpContent httpContent)
+        {
+            return ms_client.PostAsync(url, httpContent).Result;
         }
 
         static async Task Main(string[] args)

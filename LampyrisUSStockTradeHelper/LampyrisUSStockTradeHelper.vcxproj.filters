@@ -39,6 +39,9 @@
     <ClInclude Include="Source\Scripting\MonoScriptingSystem.h">
       <Filter>Source\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Scripting\SignatureMaker.h">
+      <Filter>Source\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
