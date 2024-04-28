@@ -273,3 +273,46 @@ __pycache__/
 
 # Cake - Uncomment if you are using it
 # tools/
+
+# 忽略所有.tlog文件
+*.tlog
+
+# 忽略所有.suo文件
+*.suo
+
+# 忽略所有.user文件
+*.user
+
+# 忽略所有.userosscache文件
+*.userosscache
+
+# 忽略所有.sdf文件
+*.sdf
+
+# 忽略所有.ipch文件
+ipch/
+*.ipch
+
+# 忽略特定目录
+bin/
+obj/
+[Bb]uild/
+[Dd]ebug*/
+[Rr]elease*/
+
+# 忽略Visual Studio Code 的设置文件
+.vscode/
+
+# 忽略Visual Studio 的设置文件
+.vs/
+
+# 忽略所有.ncb文件
+*.ncb
+
+# 忽略所有.VC.db文件
+*.VC.db
+
+# 忽略所有.VC.VC.opendb文件
+*.VC.VC.opendb
+
+*.cache
