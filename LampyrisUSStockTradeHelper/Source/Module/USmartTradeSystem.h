@@ -13,14 +13,21 @@
 #include <Scripting/MonoScriptingSystem.h>
 
 class ScriptingStringContent :public IMonoObjectWrapper {
+private:
+	std::string m_content;
+	std::string m_mediaType;
 public:
-	ScriptingStringContent(const std::string& content, const std::string& mediaType) {
+	ScriptingStringContent(const std::string& content, const std::string& mediaType):
+		m_content(content),m_mediaType(mediaType){
 
 	}
 
 	virtual MonoObject* ToMonoObject() {
-		auto type = MonoScriptingSystem::GetInstance()->GetType("System.Net.Http", "StringContent");
-		type->New();
+		auto StringContentType = MonoScriptingSystem::GetInstance()->GetType("System.Net.Http", "StringContent");
+		auto EncodingType = MonoScriptingSystem::GetInstance()->GetType("System.Text", "Encoding");
+		auto utf8 = EncodingType->GetProperty(nullptr, "UTF8");
+
+		return StringContentType->New("(string,System.Text.Encoding,string)", m_content.c_str(), utf8, m_mediaType.c_str());
 	}
 };
 

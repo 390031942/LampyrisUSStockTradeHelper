@@ -18,6 +18,15 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 
+static void mono_raise_std_exception(MonoObject* exception) {
+    MonoString* exStr = mono_object_to_string(exception, nullptr);
+    const char* exCStr = mono_string_to_utf8(exStr);
+    std::string errorMsg = "Exception thrown: ";
+    errorMsg += exCStr;
+    mono_free(exception);
+    throw std::runtime_error(errorMsg);
+}
+
 class IMonoObjectWrapper {
     virtual MonoObject* ToMonoObject() = 0;
 };
@@ -115,13 +124,8 @@ public:
         void* params[] = { &args... };
         MonoObject* exception = nullptr;
         MonoObject* result = mono_runtime_invoke(method, self, params, &exception);
-        if (exception) {
-            MonoString* exStr = mono_object_to_string(exception, nullptr);
-            const char* exCStr = mono_string_to_utf8(exStr);
-            std::string errorMsg = "Exception thrown: ";
-            errorMsg += exCStr;
-            mono_free(exception);
-            throw std::runtime_error(errorMsg);
+        if (exception != nullptr) {
+            mono_raise_std_exception(exception);
         }
         return result;
     }
@@ -132,9 +136,70 @@ public:
     }
 
     template<typename ...Args>
-    MonoObject* New(Args... args) {
-        return this->Invoke
+    MonoObject* New(const std::string& signature,Args... args) {
+        return this->Invoke(nullptr, signature,args);
     }
+
+    MonoObject* GetProperty(MonoObject* self, const std::string& propertyName) {
+        MonoProperty* property = mono_class_get_property_from_name(this->m_hClassHandle, propertyName.c_str());
+        if (property == nullptr) {
+            return nullptr;
+        }
+
+        // 获取属性的get方法
+        MonoMethod* getter = mono_property_get_get_method(property);
+        if (getter == nullptr) {
+            return nullptr;
+        }
+
+        // 调用get方法获取属性值
+        MonoObject* exception = nullptr;
+        MonoObject* result = mono_runtime_invoke(getter, self, nullptr, &exception);
+        if (exception != nullptr) {
+            mono_raise_std_exception(exception);
+        }
+        return result;
+    }
+
+    template<typename T>
+    void SetProperty(MonoObject* self, const std::string& propertyName, T* value) {
+        MonoProperty* property = mono_class_get_property_from_name(this->m_hClassHandle, propertyName.c_str());
+        if (property == nullptr) {
+            return nullptr;
+        }
+
+        // 获取属性的set方法
+        MonoMethod* setter = mono_property_get_set_method(property);
+        if (setter == nullptr) {
+            return;
+        }
+
+        void* args[1];
+        args[0] = mono_value_box(mono_domain_get(), mono_get_int32_class(), value);
+
+        // 调用set方法设置属性值
+        MonoObject* exception = nullptr;
+        mono_runtime_invoke(setter, self, args, &exception);
+
+        if (exception != nullptr) {
+            mono_raise_std_exception(exception);
+        }
+    }
+
+    MonoObject* GetField(MonoObject* self, const std::string& fieldName) {
+        MonoClassField* field = mono_class_get_field_from_name(this->m_hClassHandle, fieldName.c_str());
+        MonoObject* object;
+        mono_field_set_value(self, field, &object);
+    }
+
+    template<typename T>
+    void SetField(MonoObject* self, const std::string& propertyName, T* value) {
+        MonoClassField* field = mono_class_get_field_from_name(this->m_hClassHandle, fieldName.c_str());
+        T value;
+        mono_field_get_value(obj_instance, field, &value);
+        return value;
+    }
+
     friend class MonoScriptingSystem;
 };
 

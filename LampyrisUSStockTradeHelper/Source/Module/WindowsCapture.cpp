@@ -1,3 +1,11 @@
+/****************************************************************************
+**
+** Copyright (C) 2024 HongJin Investment Cooperation
+** Contact: gameta@qq.com
+**
+** File: WindowsCapture.cpp
+** Desc: 实现了股票快速交易的窗口
+****************************************************************************/
 #include "WindowsCapture.h"
 
 std::string WindowsCapture::ms_targetClassName;

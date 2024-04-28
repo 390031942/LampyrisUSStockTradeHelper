@@ -97,7 +97,7 @@
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <ClCompile>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">

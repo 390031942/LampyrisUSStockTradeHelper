@@ -3,7 +3,7 @@
 ** Copyright (C) 2024 HongJin Investment Cooperation
 ** Contact: gameta@qq.com
 **
-** File: WindowsCapture.cpp
+** File: WindowsCapture.h
 ** Desc: 实现了股票快速交易的窗口
 ****************************************************************************/
 #pragma once
@@ -11,7 +11,6 @@
 #include <QPixmap>
 #include <Windows.h>
 #include <QtWinExtras/QtWin>
-
 
 class WindowsCapture {
 private:
