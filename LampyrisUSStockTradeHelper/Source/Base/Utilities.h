@@ -3,8 +3,8 @@
 ** Copyright (C) 2024 HongJin Investment Cooperation
 ** Contact: gameta@qq.com
 **
-** File: OcrSystem.h
-** Desc: 实现了对图片文件的文字识别功能
+** File: Utilities.h
+** Desc: 实用工具类
 ****************************************************************************/
 #pragma once
 #include <vector>

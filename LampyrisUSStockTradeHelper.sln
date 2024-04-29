@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34316.72
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LampyrisUSStockTradeHelper", "LampyrisUSStockTradeHelper\LampyrisUSStockTradeHelper.vcxproj", "{6D51806D-18C2-483B-9C49-8E8AF1871EAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LampyrisUIStockTradeHelper.Managed", "LampyrisUIStockTradeHelper.Managed\LampyrisUIStockTradeHelper.Managed.csproj", "{3D24D17E-9F93-4ADE-A889-8AC4BB164D25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LampyrisUSStockTradeHelper.Managed", "LampyrisUSStockTradeHelper.Managed\LampyrisUSStockTradeHelper.Managed.csproj", "{3D24D17E-9F93-4ADE-A889-8AC4BB164D25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

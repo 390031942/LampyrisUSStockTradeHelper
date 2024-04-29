@@ -1,3 +1,11 @@
+/****************************************************************************
+**
+** Copyright (C) 2024 HongJin Investment Cooperation
+** Contact: gameta@qq.com
+**
+** File: Utilities.cpp
+** Desc: 实用工具类
+****************************************************************************/
 #include "Utilities.h"
 
 // Split函数，将字符串str根据给定的分隔符delimiter分割，返回一个包含分割后的字符串的vector
