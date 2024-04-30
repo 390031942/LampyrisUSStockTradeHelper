@@ -137,7 +137,7 @@ public:
 
     template<typename ...Args>
     MonoObject* New(const std::string& signature,Args... args) {
-        return this->Invoke(nullptr, signature,args);
+        return this->Invoke(nullptr, signature,args...);
     }
 
     MonoObject* GetProperty(MonoObject* self, const std::string& propertyName) {
@@ -193,10 +193,10 @@ public:
     }
 
     template<typename T>
-    void SetField(MonoObject* self, const std::string& propertyName, T* value) {
+    void SetField(MonoObject* self, const std::string& fieldName, T* value) {
         MonoClassField* field = mono_class_get_field_from_name(this->m_hClassHandle, fieldName.c_str());
         T value;
-        mono_field_get_value(obj_instance, field, &value);
+        mono_field_get_value(self, field, &value);
         return value;
     }
 
