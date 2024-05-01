@@ -13,6 +13,7 @@
 #include <QtWidgets/QApplication>
 #include <QFileInfo>
 #include <QDir>
+#include <Module/USmartTradeSystem.h>
 
 using namespace std;
 
@@ -28,10 +29,9 @@ int main(int argc, char *argv[]) {
         MonoScriptingSystem::GetInstance()->Initialize();
         MonoScriptingSystem::GetInstance()->LoadAssembly("C:\\Users\\Administrator\\source\\repos\\LampyrisUSStockTradeHelper\\x64\\Debug\\EntryPoint.dll");
         {
+            ScriptingStringContent s("abc","asv");
+            auto mono = s.ToMonoObject();
             // ³õÊ¼»¯C# 
-            auto type = MonoScriptingSystem::GetInstance()->GetType("LampyrisUIStockTradeHelper.Managed","EntryPoint");
-            MonoObject* o = type->Invoke(nullptr, "Main(int)", 3);
-            int val = mono_to_native<int>(o);
             returnCode = a.exec();
         }
         MonoScriptingSystem::GetInstance()->Finalize();
