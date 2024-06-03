@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QDebug>
 
 class MarketTableView: public QTableView {
 	Q_OBJECT

@@ -8,6 +8,7 @@
 ****************************************************************************/
 #pragma once
 #include "TablePreMarketModel.h"
+#include <QDebug>
 
 TablePreMarketModel::TablePreMarketModel() {
     QObject::connect(&m_manager, &QNetworkAccessManager::finished, [=](QNetworkReply* reply) {

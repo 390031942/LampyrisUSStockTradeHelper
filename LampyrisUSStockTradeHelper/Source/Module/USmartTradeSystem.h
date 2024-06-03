@@ -39,6 +39,7 @@ private:
 	QNetworkReply*        m_replyShortMaxCount;
 	QNetworkReply*        m_replyTodayOrder;
 	QNetworkReply*        m_replyQueryServerTime;
+	QNetworkReply*        m_replyQuerySetTradePassword;
 
 	QNetworkAccessManager m_listGetManager;
 	QNetworkRequest       m_listGetRequest;
@@ -96,6 +97,8 @@ public:
 	void                  ExecuteQueryMaxQuantity(const QString& code, const QString& price);
 
 	void                  ExecuteQueryShortMaxQuantity(const QString& code, const QString& price);
+
+	void                  ExecuteQueryNeedPassword();
 
 	void                  RefreshUSStockList();
 };

@@ -7,6 +7,7 @@
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
     USmartTradeSystem::GetInstance()->Initialize();
+    USmartTradeSystem::GetInstance()->ExecuteQueryNeedPassword();
     TradeOperationPanel w;
     SystemTrayIcon::GetInstance()->Show();
     w.show();

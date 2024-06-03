@@ -217,6 +217,10 @@ void USmartTradeSystem::Initialize() {
         else if (reply == m_replyTodayOrder) {
             EventManager::GetInstance()->RaiseEvent(EventType::ResUsmartQueryTodayOrder, params);
         }
+        else if (reply == m_replyQuerySetTradePassword) {
+            int a = 1;
+        }
+
         reply->deleteLater();
         });
 
@@ -262,9 +266,9 @@ void USmartTradeSystem::Initialize() {
             }
         }
 
-        std::sort(m_stockInfoList.begin(), m_stockInfoList.end(), [](const StockTradeInfo& a, const StockTradeInfo& b) {
-            return b.percentage > a.percentage;
-        });
+        // std::sort(m_stockInfoList.begin(), m_stockInfoList.end(), [](const StockTradeInfo& a, const StockTradeInfo& b) {
+        //     return b.percentage > a.percentage;
+        // });
 
         if (!m_isDragonOneExecuted) {
             QDateTime maxDateTime = QDateTime::fromMSecsSinceEpoch(maxTimeStamp);
@@ -536,6 +540,11 @@ void USmartTradeSystem::ExecuteQueryShortMaxQuantity(const QString& code, const 
     m_request.setHeader(QNetworkRequest::CookieHeader, QByteArray());
 
     m_replyShortMaxCount = m_manager.post(m_request, json.toUtf8());
+}
+
+void USmartTradeSystem::ExecuteQueryNeedPassword() {
+    m_request.setUrl(QUrl("/user-account-server-sg/api/get-user-is-set-trade-password/v1"));
+    m_replyQuerySetTradePassword = m_manager.get(m_request);
 }
 
 void USmartTradeSystem::RefreshUSStockList() {
