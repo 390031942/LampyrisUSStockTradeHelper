@@ -276,7 +276,7 @@ void USmartTradeSystem::Initialize() {
             if (maxTime.hour() >= 0 && maxTime.minute() >= 0 && maxTime.second() >= 0) {
                 m_isDragonOneExecuted = true; 
                 for (int i = 0; i < this->m_stockInfoList.size(); i++) {
-                    const StockTradeInfo& info = this->m_stockInfoList[0];
+                    const StockTradeInfo& info = this->m_stockInfoList[i];
                     if (info.code.size() >= 5 || info.name.contains("Wt") || info.code.contains("_")) {
                         continue;
                     }
@@ -543,7 +543,7 @@ void USmartTradeSystem::ExecuteQueryShortMaxQuantity(const QString& code, const 
 }
 
 void USmartTradeSystem::ExecuteQueryNeedPassword() {
-    m_request.setUrl(QUrl("/user-account-server-sg/api/get-user-is-set-trade-password/v1"));
+    m_request.setUrl(QUrl("https://jy.usmartsg.com/user-account-server-sg/api/get-user-is-set-trade-password/v1"));
     m_replyQuerySetTradePassword = m_manager.get(m_request);
 }
 
@@ -551,7 +551,7 @@ void USmartTradeSystem::RefreshUSStockList() {
     if (m_replyListGet != nullptr) {
         return;
     }
-    QString url = "http://72.push2.eastmoney.com/api/qt/clist/get?cb=&pn=1&pz=200000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&wbp2u=2710255628112086|0|1|0|web&fid=f3&fs=m:105,m:106,m:107&fields=f2,f3,f6,f8,f12,f14,f124,f292&_=1715054538673";
+    QString url = "http://72.push2.eastmoney.com/api/qt/clist/get?cb=&pn=1&pz=200000&po=1&np=1&ut=bd1d9ddb04089700cf9c27f6f7426281&fltt=2&invt=2&wbp2u=2710255628112086|0|1|0|web&fid=f3&fs=m:105,m:106,m:107&fields=f2,f3,f6,f8,f12,f17,f14,f124,f292&_=1715054538673";
     m_listGetRequest.setUrl(QUrl(url));
     m_replyListGet = m_listGetManager.get(m_listGetRequest);
 }

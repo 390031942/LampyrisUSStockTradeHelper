@@ -138,7 +138,7 @@ TradeOperationPanel::TradeOperationPanel(QWidget* parent) :QWidget(parent) {
 	this->RefreshStockTradeInfo();
 
 	// 设置为置顶
-	this->setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint); // 设置窗口标志为始终置顶
+	// this->setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint); // 设置窗口标志为始终置顶
 
 	this->InitTempStopStockTableView();
 	this->InitPreMarketTableView();
