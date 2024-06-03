@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("LampyrisUIStockTradeHelper.Managed")]
+[assembly: AssemblyTitle("LampyrisUSStockTradeHelper.Managed")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Organization")]
-[assembly: AssemblyProduct("LampyrisUIStockTradeHelper.Managed")]
+[assembly: AssemblyProduct("LampyrisUSStockTradeHelper.Managed")]
 [assembly: AssemblyCopyright("Copyright © Organization 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

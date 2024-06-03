@@ -8,7 +8,7 @@
 ****************************************************************************/
 using System;
 
-namespace LampyrisUIStockTradeHelper.Managed
+namespace LampyrisUSStockTradeHelper.Managed
 {
     [Serializable]
     public class SerializableKeyValuePair<TKey, TValue>

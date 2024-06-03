@@ -9,7 +9,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace LampyrisUIStockTradeHelper.Managed
+namespace LampyrisUSStockTradeHelper.Managed
 {
     public static class EventManager
     {

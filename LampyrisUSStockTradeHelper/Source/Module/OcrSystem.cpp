@@ -9,26 +9,29 @@
 
 #include "OcrSystem.h"
 #include "Base/Utilities.h"
-#include <exception>
+#include <exception>		
 
-bool OcrSystem::Init() {
+OCR_HANDLE OcrSystem::ms_handle = OcrSystem::Init();
+
+OCR_HANDLE OcrSystem::Init() {
 	try {
-		this->m_handle = ::OcrInit(DET_MODEL, CLS_MODEL, REC_MODEL, KEY_FILE, THREAD_NUM);
-		return true;
+		OCR_HANDLE handle = ::OcrInit(DET_MODEL, CLS_MODEL, REC_MODEL, KEY_FILE, THREAD_NUM);
+		return handle;
 	}
-	catch (const std::exception& ex) {
-		return false;
+	catch (const std::exception& ex) {	
+		throw std::exception("OcrSystem::Init() Failed");
+		return NULL;
 	}
 }
 
-OcrSystem::OcrResultList OcrSystem::Detect(OCR_HANDLE handle, const char* imagePath, const  char* imageName, OCR_PARAM* params) {
-	OCR_BOOL bRet = ::OcrDetect(handle, imagePath, imageName, params);
+OcrSystem::OcrResultList OcrSystem::Detect(const char* imagePath, const  char* imageName, OCR_PARAM* params) {
+	OCR_BOOL bRet = ::OcrDetect(ms_handle, imagePath, imageName, params);
 	if (bRet) {
-		int nLen = ::OcrGetLen(handle);
+		int nLen = ::OcrGetLen(ms_handle);
 		if (nLen > 0) {
 			char* szInfo = (char*)::malloc(nLen);
 			if (szInfo) {
-				if (::OcrGetResult(handle, szInfo, nLen)) {
+				if (::OcrGetResult(ms_handle, szInfo, nLen)) {
 					return Utilities::Split(szInfo, "\n");
 				}
 				::free(szInfo);
@@ -36,4 +39,20 @@ OcrSystem::OcrResultList OcrSystem::Detect(OCR_HANDLE handle, const char* imageP
 		}
 	}
 	return OcrResultList();
+}
+
+void OcrSystem::DetectNoAlloc(const char* imagePath,const char* imageName,OCR_PARAM* params,OcrResultList& resultList) {
+	OCR_BOOL bRet = ::OcrDetect(ms_handle, imagePath, imageName, params);
+	if (bRet) {
+		int nLen = ::OcrGetLen(ms_handle);
+		if (nLen > 0) {
+			char* szInfo = (char*)::malloc(nLen);
+			if (szInfo) {
+				if (::OcrGetResult(ms_handle, szInfo, nLen)) {
+					Utilities::SplitNoAlloc(szInfo, "\n", resultList);
+				}
+				::free(szInfo);
+			}
+		}
+	}
 }

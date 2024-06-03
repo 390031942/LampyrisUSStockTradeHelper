@@ -18,25 +18,37 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Base\Utilities.cpp" />
-    <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\Module\OcrSystem.cpp" />
+    <ClCompile Include="Source\main.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="Source\Module\USmartTradeSystem.cpp" />
     <ClCompile Include="Source\Module\WindowsCapture.cpp" />
-    <ClCompile Include="Source\Scripting\MonoScriptingSystem.cpp" />
-    <ClCompile Include="UI\TradeOperationPanel.cpp" />
+    <ClCompile Include="Source\UI\MarketTableView.cpp" />
+    <ClCompile Include="Source\UI\TablePreMarketModel.cpp" />
+    <ClCompile Include="Source\UI\TradeOperationPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Base\EventManager.h" />
     <ClInclude Include="Source\Base\Singleton.h" />
     <ClInclude Include="Source\Base\Utilities.h" />
-    <ClInclude Include="Source\Module\OcrSystem.h" />
-    <ClInclude Include="Source\Module\WindowsCapture.h" />
+    <ClInclude Include="Source\Const\EventType.h" />
+    <ClInclude Include="Source\Model\StockTradeInfo.h" />
+    <ClInclude Include="Source\Model\TableTempStockModel.h" />
+    <ClInclude Include="Source\Module\SystemTrayIcon.h" />
     <ClInclude Include="Source\Module\USmartTradeSystem.h" />
-    <ClInclude Include="Source\Scripting\MonoScriptingSystem.h" />
-    <ClInclude Include="Source\Scripting\SignatureMaker.h" />
-    <QtMoc Include="UI\TradeOperationPanel.h" />
+    <ClInclude Include="Source\Module\WindowsCapture.h" />
+    <QtMoc Include="Source\UI\MarketTableView.h" />
+    <ClInclude Include="Source\UI\TablePreMarketModel.h" />
+    <QtMoc Include="Source\UI\TradeOperationPanel.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="Resource\TradeOperationPanel.ui" />
+    <QtUic Include="Resource\UI\TradeOperationPanel.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource\Image\ImageRes.qrc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6D51806D-18C2-483B-9C49-8E8AF1871EAE}</ProjectGuid>
@@ -61,12 +73,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>_Qt-static</QtInstall>
-    <QtModules>core;gui;widgets;winextras</QtModules>
+    <QtModules>core;network;gui;widgets;winextras</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>_Qt-static</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;network;gui;widgets;winextras</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -84,17 +96,26 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <IncludePath>$(SolutionDir)Third-Party\OcrLib\include\;$(SolutionDir)Third-Party\mono\include\;$(ProjectDir)Source;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Third-Party\OcrLib\include\;$(SolutionDir)Third-Party\mono\include\;$(ProjectDir)Source;$(SolutionDir)Third-Party\zlib\include\;$(IncludePath)</IncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <LibraryPath>$(SolutionDir)Third-Party\OcrLib\lib\;$(SolutionDir)Third-Party\mono\lib\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Third-Party\OcrLib\lib\;$(SolutionDir)Third-Party\mono\lib\;$(SolutionDir)Third-Party\zlib\lib\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <IncludePath>$(SolutionDir)Third-Party\OcrLib\include\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Third-Party\OcrLib\include\;$(SolutionDir)Third-Party\mono\include\;$(ProjectDir)Source;$(SolutionDir)Third-Party\zlib\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Third-Party\zlib\lib\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalDependencies>mono-2.0-sgen.lib;RapidOcrOnnx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mono-2.0-sgen.lib;RapidOcrOnnx.lib;zlibstaticd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
+    </Link>
+    <ClCompile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Link>
+      <AdditionalDependencies>zlibstatic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>

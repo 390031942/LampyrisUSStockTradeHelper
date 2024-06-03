@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/ImageRes">
+        <file>QuoteEmpty1.png</file>
+        <file>QuoteEmpty2.png</file>
+        <file>Icon.png</file>
+    </qresource>
+</RCC>

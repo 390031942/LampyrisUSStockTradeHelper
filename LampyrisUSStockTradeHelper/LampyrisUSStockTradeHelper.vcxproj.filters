@@ -13,22 +13,25 @@
     <Filter Include="Source\UI">
       <UniqueIdentifier>{b598d958-c1de-4e7e-8a89-81ce374da30d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Scripting">
-      <UniqueIdentifier>{16b0b9b8-fc06-4c00-8dc4-3021181f3f97}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Module">
       <UniqueIdentifier>{79f5f47c-f992-416d-9e1b-a7f0b2d795ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Model">
+      <UniqueIdentifier>{a7e4f81c-95a0-4d98-963f-f43fbccf1533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\UI">
+      <UniqueIdentifier>{90f89c09-8bc4-48bd-81b7-b68ed5144723}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Image">
+      <UniqueIdentifier>{65e61da8-207f-4206-b782-142e8f88f4b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Const">
+      <UniqueIdentifier>{888be729-fd8c-4193-8454-68d11a7592c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Base\Utilities.h">
       <Filter>Source\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Module\OcrSystem.h">
-      <Filter>Source\Module</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Module\WindowsCapture.h">
-      <Filter>Source\Module</Filter>
     </ClInclude>
     <ClInclude Include="Source\Module\USmartTradeSystem.h">
       <Filter>Source\Module</Filter>
@@ -36,44 +39,67 @@
     <ClInclude Include="Source\Base\Singleton.h">
       <Filter>Source\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\MonoScriptingSystem.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="Source\Base\EventManager.h">
+      <Filter>Source\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scripting\SignatureMaker.h">
-      <Filter>Source\Scripting</Filter>
+    <ClInclude Include="Source\Const\EventType.h">
+      <Filter>Source\Const</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\StockTradeInfo.h">
+      <Filter>Source\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Module\WindowsCapture.h">
+      <Filter>Source\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Model\TableTempStockModel.h">
+      <Filter>Source\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UI\TablePreMarketModel.h">
+      <Filter>Source\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Module\SystemTrayIcon.h">
+      <Filter>Source\Module</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Base\Utilities.cpp">
       <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Module\OcrSystem.cpp">
-      <Filter>Source\Module</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Module\WindowsCapture.cpp">
-      <Filter>Source\Module</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\TradeOperationPanel.cpp">
-      <Filter>Source\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Module\USmartTradeSystem.cpp">
       <Filter>Source\Module</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scripting\MonoScriptingSystem.cpp">
-      <Filter>Source\Scripting</Filter>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Module\WindowsCapture.cpp">
+      <Filter>Source\Module</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\MarketTableView.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\TradeOperationPanel.cpp">
+      <Filter>Source\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UI\TablePreMarketModel.cpp">
+      <Filter>Source\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="Resource\TradeOperationPanel.ui">
-      <Filter>Resource</Filter>
+    <QtMoc Include="Source\UI\MarketTableView.h">
+      <Filter>Source\UI</Filter>
+    </QtMoc>
+    <QtMoc Include="Source\UI\TradeOperationPanel.h">
+      <Filter>Source\UI</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="Resource\UI\TradeOperationPanel.ui">
+      <Filter>Resource\UI</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="UI\TradeOperationPanel.h">
-      <Filter>Source\UI</Filter>
-    </QtMoc>
+    <QtRcc Include="Resource\Image\ImageRes.qrc">
+      <Filter>Resource\Image</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>

@@ -12,7 +12,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace LampyrisUIStockTradeHelper.Managed
+namespace LampyrisUSStockTradeHelper.Managed
 {
     public class SerializationManager
     {

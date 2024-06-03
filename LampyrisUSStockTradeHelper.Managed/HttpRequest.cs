@@ -13,8 +13,10 @@ using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Text;
+using System.Runtime.CompilerServices;
 
-namespace LampyrisUIStockTradeHelper.Managed    
+namespace LampyrisUSStockTradeHelper.Managed    
 {
     public class TaskContainer<T> where T : class
     {
@@ -34,6 +36,15 @@ namespace LampyrisUIStockTradeHelper.Managed
             return counter;
         }
     }
+    
+    public class DefaultRequestHeader
+    {
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern KeyValuePair<string, string>[] GetDefaultRequestHeaders();
+
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        public static extern KeyValuePair<string, string> GetAuthorization();
+    }
 
     public static class HttpRequest
     {
@@ -41,18 +52,18 @@ namespace LampyrisUIStockTradeHelper.Managed
 
         private static TaskContainer<HttpResponseMessage> ms_taskContainer = new TaskContainer<HttpResponseMessage>();
 
-        public static void Initialize(Dictionary<string,string> defaultRequestHeaderMap, 
-                                      string authenticationScheme, 
-                                      string authenticationParameter)
+        public static void Initialize()
         {
             ms_client = new HttpClient();
 
             // 设置请求的Headers  
-            foreach(var pair in defaultRequestHeaderMap)
+            foreach(var pair in DefaultRequestHeader.GetDefaultRequestHeaders())
             {
                 ms_client.DefaultRequestHeaders.Add(pair.Key, pair.Value);
             }
-            ms_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authenticationScheme, authenticationParameter); 
+
+            // var authentication = DefaultRequestHeader.GetAuthorization();
+            // ms_client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authentication.Key, authentication.Value); 
         }
 
         public static void Finalialize()
@@ -96,10 +107,10 @@ namespace LampyrisUIStockTradeHelper.Managed
             return ms_taskContainer.Add(ms_client.GetAsync(url));
         }
 
-        public static int PostAsync(string url,HttpContent httpContent)
+        public static int PostAsync(string url, string json)
         {
-            httpContent = new StringContent("");
-            return ms_taskContainer.Add(ms_client.PostAsync(url, httpContent));
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            return ms_taskContainer.Add(ms_client.PostAsync(url, content));
         }
 
         public static HttpResponseMessage GetSync(string url)
@@ -107,9 +118,10 @@ namespace LampyrisUIStockTradeHelper.Managed
             return ms_client.GetAsync(url).Result;
         }
 
-        public static HttpResponseMessage PostSync(string url, HttpContent httpContent)
+        public static HttpResponseMessage PostSync(string url, string json)
         {
-            return ms_client.PostAsync(url, httpContent).Result;
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            return ms_client.PostAsync(url, content).Result;
         }
 
         static async Task Main(string[] args)

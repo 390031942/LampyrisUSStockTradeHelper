@@ -7,13 +7,22 @@
 ** Desc: C# DLL的入口类
 ****************************************************************************/
 
-namespace LampyrisUIStockTradeHelper.Managed
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace LampyrisUSStockTradeHelper.Managed
 {
     public class EntryPoint
     {
-        public static int Main(int args)
+        public static void OnStart()
         {
-            return args* args;
+            HttpRequest.Initialize();
+        }
+
+        public static void OnDestroy()
+        {
+            HttpRequest.Finalialize();
         }
     }
 }

@@ -13,6 +13,7 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <filesystem>
 #include <Base/Singleton.h>
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
@@ -23,7 +24,7 @@ static void mono_raise_std_exception(MonoObject* exception) {
     const char* exCStr = mono_string_to_utf8(exStr);
     std::string errorMsg = "Exception thrown: ";
     errorMsg += exCStr;
-    mono_free(exception);
+    mono_free(exception); 
     throw std::runtime_error(errorMsg);
 }
 
@@ -95,28 +96,50 @@ static T mono_to_native(MonoObject* monoObject) {
     return mono_extract_value<T>(monoObject);
 }
 
+class MonoScriptingClass;
+typedef std::shared_ptr<MonoScriptingClass> MonoScriptingClassPtr;
+
+class MonoScriptingAssembly;
+typedef std::shared_ptr<MonoScriptingAssembly> MonoScriptingAssemblyPtr;
+
+class MonoScriptingAssembly {
+    typedef std::unordered_map<std::string, MonoScriptingClassPtr> ClassHandleMap;
+private:
+    MonoAssembly*  m_pMonoAssembly;
+    MonoImage*     m_pMonoImage;
+    ClassHandleMap m_classHandleMap;
+    std::string    m_assemblyName;
+public:
+    static MonoScriptingAssemblyPtr LoadFromFilePath(const std::string& path);
+
+    MonoScriptingClassPtr GetType(const std::string& typeName);
+
+    MonoScriptingClassPtr GetType(const std::string& namespaceName, const std::string& typeName);
+};
+
 class MonoScriptingClass {
     typedef std::unordered_map<std::string, MonoMethod*> MethodHandleMap;
 private:
-    MonoDomain*     m_pMonoDomain;
-    MonoClass*      m_hClassHandle;
+    MonoClass*      m_pMonoClass;
     std::string     m_className;
     MethodHandleMap m_methodHandleMap;
 
-    MonoMethod* GetMethod(const std::string& methodSignature) {
-        if (m_methodHandleMap.contains(methodSignature)) {
-            return m_methodHandleMap[methodSignature];
-        }
-
-        std::string method_desc = this->m_className + ":" + methodSignature;
-        MonoMethodDesc* method_desc_obj = mono_method_desc_new(method_desc.c_str(), NULL);
-        MonoMethod* method = mono_method_desc_search_in_class(method_desc_obj, this->m_hClassHandle);
-        mono_method_desc_free(method_desc_obj);
-
-        m_methodHandleMap[methodSignature] = method; 
-        return method;
-    }
 public:
+    MonoMethod* GetMethod(const std::string& methodSignature);
+
+    MonoClass* GetMonoClass() inline const { return this->m_pMonoClass; }
+    
+    MonoObject* Invoke(MonoObject* self, const std::string& methodSignature) {
+        MonoMethod* method = GetMethod(methodSignature);
+
+        MonoObject* exception = nullptr;
+        MonoObject* result = mono_runtime_invoke(method, self, NULL, &exception);
+        if (exception != nullptr) {
+            mono_raise_std_exception(exception);
+        }
+        return result;
+    }
+
     template <typename... Args>
     MonoObject* Invoke(MonoObject* self,const std::string& methodSignature,Args... args) {
         MonoMethod* method = GetMethod(methodSignature);
@@ -131,7 +154,7 @@ public:
     }
     
     MonoObject* New() {
-        MonoObject * obj = mono_object_new(this->m_pMonoDomain, this->m_hClassHandle);
+        MonoObject * obj = mono_object_new(mono_domain_get(), this->m_pMonoClass);
         return obj;
     }
 
@@ -141,7 +164,7 @@ public:
     }
 
     MonoObject* GetProperty(MonoObject* self, const std::string& propertyName) {
-        MonoProperty* property = mono_class_get_property_from_name(this->m_hClassHandle, propertyName.c_str());
+        MonoProperty* property = mono_class_get_property_from_name(this->m_pMonoClass, propertyName.c_str());
         if (property == nullptr) {
             return nullptr;
         }
@@ -163,7 +186,7 @@ public:
 
     template<typename T>
     void SetProperty(MonoObject* self, const std::string& propertyName, T* value) {
-        MonoProperty* property = mono_class_get_property_from_name(this->m_hClassHandle, propertyName.c_str());
+        MonoProperty* property = mono_class_get_property_from_name(this->m_pMonoClass, propertyName.c_str());
         if (property == nullptr) {
             return nullptr;
         }
@@ -187,39 +210,36 @@ public:
     }
 
     MonoObject* GetField(MonoObject* self, const std::string& fieldName) {
-        MonoClassField* field = mono_class_get_field_from_name(this->m_hClassHandle, fieldName.c_str());
+        MonoClassField* field = mono_class_get_field_from_name(this->m_pMonoClass, fieldName.c_str());
         MonoObject* object;
         mono_field_set_value(self, field, &object);
     }
 
     template<typename T>
     void SetField(MonoObject* self, const std::string& fieldName, T* value) {
-        MonoClassField* field = mono_class_get_field_from_name(this->m_hClassHandle, fieldName.c_str());
+        MonoClassField* field = mono_class_get_field_from_name(this->m_pMonoClass, fieldName.c_str());
         T value;
         mono_field_get_value(self, field, &value);
         return value;
     }
 
-    friend class MonoScriptingSystem;
+    friend class MonoScriptingAssembly;
 };
 
-typedef std::shared_ptr<MonoScriptingClass> MonoScriptingClassPtr;
-
 class MonoScriptingSystem:public Singleton<MonoScriptingSystem> {
-    typedef std::unordered_map<std::string, MonoScriptingClassPtr> ClassHandleMap;
+    typedef std::unordered_map<std::string, MonoScriptingAssemblyPtr> AssemblyMap;
 private:
-    MonoDomain*           m_pMonoDomain;
-    MonoAssembly*         m_pMonoAsm;
-    MonoImage*            m_pMonoImage;
-    ClassHandleMap        m_classHandleMap;
-public:                   
-    void                  Initialize();
+    MonoDomain*              m_pMonoDomain;
+    MonoAssembly*            m_pMonoAsm;
+    AssemblyMap              m_assemblyMap;
 
-    void                  Finalize();
+    void                     SetupInternalCall();
+public:                      
+    void                     Initialize();
+                             
+    void                     Finalize();
                           
-    bool                  LoadAssembly(const std::string& assemblyName);
-
-    MonoScriptingClassPtr GetType(const std::string& namespaceName,const std::string& typeName);
-
-    MonoString*           GetString(const char* string);
+    MonoScriptingAssemblyPtr LoadAssembly(const std::string& assemblyName);
+                             
+    MonoString*              GetString(const char* string);
 };

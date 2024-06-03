@@ -17,6 +17,7 @@ private:
 	struct LPARAM_INFO {
 		const char* targetClassName;
 		HWND        foundWindow; 
+		const char* parentClassName;
 	};
 public:
 	enum Anchor {
@@ -28,6 +29,8 @@ public:
 private:
 	std::string          m_windowClassName;
 
+	std::string          m_windowParentClassName;
+
 	HWND                 m_hWnd;
 
 	HDC                  m_hWindowDC;
@@ -38,13 +41,17 @@ private:
 
 	static BOOL CALLBACK EnumChildWindowProc(HWND hwnd, LPARAM lParam);
 
-	static HWND          FindWindowByClassName(std::string& className);
+	static HWND          FindWindowByClassName(std::string& className,std::string& parentClassName);
 public:
-	                     WindowsCapture(const std::string& windowClassName);
+	                     WindowsCapture(const std::string& windowClassName, const std::string& windowParentClassName);
 			            
 	virtual             ~WindowsCapture();
 			            
 	bool                 Init();
 			            
 	void                 Capture(const std::string& savePath,float width,float height,float offsetX,float offsetY, Anchor anchor);
+
+	bool                 CheckWindowValid();
+
+	DWORD                GetWindowProcessID();
 };

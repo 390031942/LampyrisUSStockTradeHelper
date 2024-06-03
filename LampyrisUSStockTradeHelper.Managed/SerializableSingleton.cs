@@ -9,7 +9,7 @@
 using System;
 using System.Reflection;
 
-namespace LampyrisUIStockTradeHelper.Managed
+namespace LampyrisUSStockTradeHelper.Managed
 {
     public interface IPostSerializationHandler
     {

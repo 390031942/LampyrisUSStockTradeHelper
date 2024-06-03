@@ -19,14 +19,19 @@
 #define THREAD_NUM  3
 
 class OcrSystem {
+public:
 	typedef std::vector<std::string> OcrResultList;
 private:
-	OCR_HANDLE    m_handle;
-public:
-	bool          Init();
+	static OCR_HANDLE    ms_handle;
 
-	OcrResultList Detect(OCR_HANDLE  handle, 
-		                 const char* imagePath, 
-		                 const char* imageName, 
-		                 OCR_PARAM*  params);
+	static OCR_HANDLE    Init();
+public:
+	static OcrResultList Detect(const char* imagePath, 
+		                        const char* imageName, 
+		                        OCR_PARAM*  params);
+
+	static void          DetectNoAlloc(const char* imagePath, 
+		                               const char* imageName, 
+		                               OCR_PARAM*  params,
+		                               OcrResultList& resultList);
 };
